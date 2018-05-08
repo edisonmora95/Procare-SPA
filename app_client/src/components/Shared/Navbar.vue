@@ -37,6 +37,14 @@
               {
                 title: 'Buscar Procarianos',
                 route: '/procarianos/'
+              },
+              {
+                title: 'Crear Grupo',
+                route: '/grupos/nuevo'
+              },
+              {
+                title: 'Buscar Grupos',
+                route: '/grupos/'
               }
             ]
           }

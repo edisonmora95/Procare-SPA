@@ -44,7 +44,62 @@ export const store = new Vuex.Store({
         grupo: 'Grupo del Chino'
       }
     ],
-    grupos: [],
+    grupos: [
+      {
+        id: '1',
+        nombre: 'Grupo de Mario',
+        tipo: 'Formación',
+        etapa: 'Primera etapa',
+        genero: 'Masculino'
+      },
+      {
+        id: '2',
+        nombre: 'Grupo de Luis',
+        tipo: 'Formación',
+        etapa: 'Primera etapa',
+        genero: 'Masculino'
+      },
+      {
+        id: '3',
+        nombre: 'Grupo de Anita',
+        tipo: 'Formación',
+        etapa: 'Primera etapa',
+        genero: 'Femenino'
+      },
+      {
+        id: '4',
+        nombre: 'Grupo de Chalo',
+        tipo: 'Formación',
+        etapa: 'Segunda etapa',
+        genero: 'Masculino'
+      }
+    ],
+    etapas: [
+      {
+        id: '0',
+        texto: 'Iniciación'
+      },
+      {
+        id: '1',
+        texto: 'Primera etapa'
+      },
+      {
+        id: '2',
+        texto: 'Segunda etapa'
+      },
+      {
+        id: '3',
+        texto: 'Tercera etapa'
+      },
+      {
+        id: '4',
+        texto: 'Cuarta etapa'
+      },
+      {
+        id: '5',
+        texto: 'Quinta etapa'
+      }
+    ],
     rules: {
       required: (value) => !!value || 'Este campo es obligatorio',
       email: (value) => {

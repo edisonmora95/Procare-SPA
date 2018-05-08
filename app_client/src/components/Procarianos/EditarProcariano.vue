@@ -147,7 +147,7 @@
             </v-card-text>
             <v-card-actions class="pt-0">
               <v-spacer></v-spacer>
-              <v-btn flat @click.native="modalEditar = false">No</v-btn>
+              <v-btn flat @click.native="cancelarEdicion">No</v-btn>
               <v-btn flat @click.native="confirmarEdicion">Si</v-btn>
             </v-card-actions>
           </v-card>
@@ -211,6 +211,9 @@ export default {
         this.procariano.imagen = fileReader.result
       })
       fileReader.readAsDataURL(files[0])
+    },
+    cancelarEdicion () {
+      this.$router.go(-1)
     },
     confirmarEdicion () {
       this.$router.go(-1)

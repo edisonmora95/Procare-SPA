@@ -3,15 +3,15 @@
     <v-layout align-center justify-center wrap row>
       <v-flex xs12 sm10 md8>
         <v-card class="elevation-12">
+          <v-card-title primary-title>
+            <h1 class="mx-auto display-1">Perfil Procariano</h1>
+          </v-card-title>
           <v-card-media class="card-avatar">
             <v-avatar size="150" class="mx-auto my-2">
               <img v-if="!procariano.imagen" src="http://via.placeholder.com/150x150">
               <img v-else :src="procariano.imagen">
             </v-avatar>  
           </v-card-media>
-          <v-card-title primary-title>
-            <h1 class="mx-auto display-1">Perfil Procariano</h1>
-          </v-card-title>
           <v-card-actions>
             <v-tabs fixed-tabs grow slot="extension" v-model="tab">
               <v-tabs-slider color="orange"></v-tabs-slider>

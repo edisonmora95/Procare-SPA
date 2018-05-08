@@ -8,6 +8,9 @@ export default {
   grupos (state) {
     return state.grupos
   },
+  etapas (state) {
+    return state.etapas
+  },
   rules (state) {
     return state.rules
   },

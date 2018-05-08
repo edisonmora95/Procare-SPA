@@ -8,6 +8,11 @@ import IngresarProcariano from '@/components/Procarianos/IngresarProcariano'
 import BuscarProcarianos from '@/components/Procarianos/BuscarProcarianos'
 import PerfilProcariano from '@/components/Procarianos/PerfilProcariano'
 import EditarProcariano from '@/components/Procarianos/EditarProcariano'
+// GRUPOS
+import CrearGrupo from '@/components/Grupos/CrearGrupo'
+import BuscarGrupo from '@/components/Grupos/BuscarGrupo'
+import PerfilGrupo from '@/components/Grupos/PerfilGrupo'
+import EditarGrupo from '@/components/Grupos/EditarGrupo'
 
 Vue.use(Router)
 
@@ -40,6 +45,30 @@ export default new Router({
       path: '/procarianos/perfil/:id/editar',
       name: 'EditarProcariano',
       component: EditarProcariano,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/grupos/',
+      name: 'BuscarGrupo',
+      component: BuscarGrupo,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/grupos/nuevo',
+      name: 'CrearGrupo',
+      component: CrearGrupo,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/grupos/:nombre',
+      name: 'PerfilGrupo',
+      component: PerfilGrupo,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/grupos/:nombre/editar',
+      name: 'EditarGrupo',
+      component: EditarGrupo,
       beforeEnter: AuthGuard
     }
   ],
