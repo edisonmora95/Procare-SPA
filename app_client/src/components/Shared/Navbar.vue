@@ -45,6 +45,14 @@
               {
                 title: 'Buscar Grupos',
                 route: '/grupos/'
+              },
+              {
+                title: 'Ingresar Benefactor',
+                route: '/benefactores/nuevo'
+              },
+              {
+                title: 'Buscar Benefactores',
+                route: '/benefactores/'
               }
             ]
           }

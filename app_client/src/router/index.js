@@ -13,6 +13,9 @@ import CrearGrupo from '@/components/Grupos/CrearGrupo'
 import BuscarGrupo from '@/components/Grupos/BuscarGrupo'
 import PerfilGrupo from '@/components/Grupos/PerfilGrupo'
 import EditarGrupo from '@/components/Grupos/EditarGrupo'
+// BENEFACTORES
+import IngresarBenefactor from '@/components/Benefactores/IngresarBenefactor'
+import BuscarBenefactores from '@/components/Benefactores/BuscarBenefactores'
 
 Vue.use(Router)
 
@@ -69,6 +72,18 @@ export default new Router({
       path: '/grupos/:nombre/editar',
       name: 'EditarGrupo',
       component: EditarGrupo,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/benefactores/',
+      name: 'BuscarBenefactores',
+      component: BuscarBenefactores,
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/benefactores/nuevo',
+      name: 'IngresarBenefactor',
+      component: IngresarBenefactor,
       beforeEnter: AuthGuard
     }
   ],

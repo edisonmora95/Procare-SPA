@@ -36,10 +36,12 @@ export default {
   .btn-continuar {
     background-color: #21378A !important;
     color: white !important;
+    width: 150px !important;
   }
   .btn-cancelar {
     background-color: #FF5252 !important;
     color: white !important;
+    width: 150px !important;
   }
   #app {
     background-color: #d3dbdb;

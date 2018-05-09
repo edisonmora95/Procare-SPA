@@ -100,6 +100,29 @@ export const store = new Vuex.Store({
         texto: 'Quinta etapa'
       }
     ],
+    benefactores: [
+      {
+        nombre: 'Benefactor Uno',
+        cedula: '0927104555',
+        email: 'benefactor_1@gmail.com',
+        estado: 'activo',
+        gestor: 'Fernando Icaza'
+      },
+      {
+        nombre: 'Benefactor Dos',
+        cedula: '0927104666',
+        email: 'benefactor_2@gmail.com',
+        estado: 'activo',
+        gestor: 'Fernando Icaza'
+      },
+      {
+        nombre: 'Benefactor Tres',
+        cedula: '0927104999',
+        email: 'benefactor_3@gmail.com',
+        estado: 'activo',
+        gestor: 'Mario Montalván'
+      }
+    ],
     rules: {
       required: (value) => !!value || 'Este campo es obligatorio',
       email: (value) => {

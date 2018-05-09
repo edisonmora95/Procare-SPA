@@ -11,6 +11,9 @@ export default {
   etapas (state) {
     return state.etapas
   },
+  benefactores (state) {
+    return state.benefactores
+  },
   rules (state) {
     return state.rules
   },
