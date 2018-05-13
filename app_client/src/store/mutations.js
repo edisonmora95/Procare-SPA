@@ -7,5 +7,8 @@ export default {
   },
   setLoggedIn (state, payload) {
     state.loggedIn = payload
+  },
+  setUsuario (state, payload) {
+    state.usuario = payload
   }
 }

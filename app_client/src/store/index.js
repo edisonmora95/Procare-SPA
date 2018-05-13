@@ -9,6 +9,7 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
+    usuario: null,
     procariano: {
       imagen: 'https://www.dccomics.com/sites/default/files/GalleryComics_1920x1080_20151216_SM_AM_AL_2_56567f3794d3e1.43316572.jpg',
       nombres: 'Edison André',

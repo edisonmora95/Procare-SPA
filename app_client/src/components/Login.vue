@@ -48,8 +48,7 @@
     },
     methods: {
       login () {
-        this.$store.commit('setLoggedIn', true)
-        this.$router.push('/')
+        this.$store.dispatch('login', {usuario: this.email, password: this.password})
       }
     }
   }

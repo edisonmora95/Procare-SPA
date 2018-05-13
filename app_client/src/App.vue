@@ -1,9 +1,9 @@
 <template id="app">
   <v-app>
-    <v-navigation-drawer app temporary v-model="sideNav" v-if="loggedIn === true">
-      <navbar v-if="loggedIn === true"></navbar>
+    <v-navigation-drawer app v-model="sideNav" v-if="loggedIn">
+      <navbar :usuario="usuario"></navbar>
     </v-navigation-drawer>
-    <v-toolbar app color="orange darken-1">
+    <v-toolbar app color="orange darken-1" v-if="loggedIn">
       <v-toolbar-side-icon dark @click="sideNav = !sideNav"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text">Fundación Procare</v-toolbar-title>
     </v-toolbar>
@@ -18,6 +18,9 @@ export default {
   computed: {
     loggedIn () {
       return this.$store.getters.loggedIn
+    },
+    usuario () {
+      return this.$store.getters.usuario
     }
   },
   data () {
