@@ -25,19 +25,21 @@ const serverApp = () => {
     name : 'SID',
     unset: 'destroy'
   }))
+
   // Passport init
   app.use(passport.initialize())
   app.use(passport.session())
 
-  const apiServer = require('./app_api/api.server')
-  app.use('/api', apiServer)
+  const api = express()
+  require('./app_api/api.server')(api)
+  app.use('/api', api)
 
   const client = express()
   require('./app_client/client.server')(client)
   app.use('/', client)
-  
+
   app.set('port', PORT)
-  return { app, server }  
+  return { app, server }
 }
 
 module.exports = {

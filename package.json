@@ -4,7 +4,9 @@
   "description": "Aplicación web para Procare. Single Page Application",
   "main": "app.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development  env-cmd .env nodemon server.js --config nodemon.json"
+    "dev": "cross-env NODE_ENV=development  env-cmd .env nodemon server.js --config nodemon.json",
+    "test:u": "cross-env NODE_ENV=testing env-cmd .env mocha app_api/test/unit_test/*.unit.test.js --exit",
+    "test:r": "cross-env NODE_ENV=testing env-cmd .env mocha app_api/test/integration_test/animadores.integration.test.js --exit"
   },
   "repository": {
     "type": "git",
@@ -19,17 +21,26 @@
   "dependencies": {
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
+    "cloudinary": "^1.11.0",
+    "co": "^4.6.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "jsonwebtoken": "^8.2.1",
+    "mysql2": "^1.5.3",
+    "npm": "^6.0.1",
     "passport": "^0.4.0",
     "passport-http": "^0.3.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "sequelize": "^4.37.7"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "cross-env": "^5.1.5",
     "env-cmd": "^8.0.1",
-    "nodemon": "^1.17.4"
+    "mocha": "^5.1.1",
+    "nodemon": "^1.17.4",
+    "supertest": "^3.1.0"
   }
 }

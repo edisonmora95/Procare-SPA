@@ -13,7 +13,7 @@
   },
   "watch": [
     "app.js",
-    "api/**",
+    "app_api/**",
     "client/client.server.js",
     "server.js"
   ],

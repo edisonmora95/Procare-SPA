@@ -1,0 +1,41 @@
+{
+  "development": {
+    "username": "procare_dev",
+    "password": "procare_sw_2",
+    "database": "procare_db_dev",
+    "host"    : "localhost",
+    "dialect" : "mysql",
+    "logging" : false,
+    "cloudinary" : {
+      "cloud_name" : "",
+      "api_key"    : "",
+      "api_secret" : ""
+    }
+  },
+  "test": {
+    "username": "procare_test",
+    "password": "procare_sw_2",
+    "database": "procare_db_test",
+    "host"    : "localhost",
+    "dialect" : "mysql",
+    "logging" : false,
+    "cloudinary" : {
+      "cloud_name" : "",
+      "api_key"    : "",
+      "api_secret" : ""
+    }
+  },
+  "production": {
+    "username": "",
+    "password": "",
+    "database": "",
+    "host"    : "",
+    "dialect" : "",
+    "logging" : false,
+    "cloudinary" : {
+      "cloud_name" : "",
+      "api_key"    : "",
+      "api_secret" : ""
+    }
+  }
+}

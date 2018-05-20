@@ -5,6 +5,13 @@ process.on('uncaughtException', (err) => {
 
 const { serverApp } = require('./app')
 let { server, app } = serverApp()
+let models          = require('./app_api/models')
+models.sequelize.sync()
+  .then(() => {
+    server.on('error', onError)
+    server.on('listening', onListening)
+    server.listen(app.get('port'))
+  })
 
 function onError(error) {
   if (error.syscall !== 'listen') {
@@ -24,7 +31,7 @@ function onError(error) {
       process.exit(1)
       break
     default:
-      throw error
+      throw errorn
   }
 }
 
@@ -37,7 +44,3 @@ function onListening() {
     console.info(`Server general corriendo en  ${bind}`)
   }
 }
-
-server.on('error', onError)
-server.on('listening', onListening)
-server.listen(app.get('port'))
