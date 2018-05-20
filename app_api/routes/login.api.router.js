@@ -67,7 +67,11 @@ passport.deserializeUser(function(id, done) {
   @apiversion 0.2.0
 */
 router.post('/', passport.authenticate('local'), controladorLogin.login);
-
+router.get('/logout', (req, res) => {
+  console.log(1234)
+  req.logout()
+  res.send({status: true})
+})
 /*
   @api {get} /api/login/usuarios
   @apiDescription Obtiene los datos del usuario conectado

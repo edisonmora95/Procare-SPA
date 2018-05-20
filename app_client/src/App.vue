@@ -15,6 +15,9 @@
 
 <script>
 export default {
+  created () {
+    // this.$store.dispatch('getLoggedUser')
+  },
   computed: {
     loggedIn () {
       return this.$store.getters.loggedIn

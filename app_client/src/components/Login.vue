@@ -2,6 +2,9 @@
   <v-container fluid fill-height class="login-background">
     <v-layout align-center justify-center>
       <v-flex xs10 sm6 md4>
+        <v-alert type="error" dismissible v-model="alert" @input="onClose" v-if="error">
+          {{ error.mensaje }}
+        </v-alert>
         <v-card class="elevation-12">
           <v-card-media
             src="/static/nuevo_logo_procare.jpg"
@@ -16,6 +19,7 @@
                 label="Email"
                 type="text"
                 v-model="email"
+                @keypress="keypressed($event)"
                 required>
               </v-text-field>
               <v-text-field
@@ -24,13 +28,14 @@
                 label="Contraseña"
                 type="password"
                 v-model="password"
+                @keypress="keypressed($event)"
                 required>
               </v-text-field>
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="btn-continuar" @click="login">Login</v-btn>
+            <v-btn class="btn-continuar" :disabled="disabled" :loading="loading" @click="login">Login</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -40,15 +45,43 @@
 
 <script>
   export default {
+    computed: {
+      error () {
+        return this.$store.getters.error
+      },
+      loading () {
+        return this.$store.getters.loading
+      },
+      disabled () {
+        return this.email === undefined || !this.email || this.email === '' || this.password === undefined || !this.password || this.password === '' || this.loading
+      }
+    },
+    watch: {
+      error (value) {
+        if (value) {
+          this.alert = true
+        }
+      }
+    },
     data () {
       return {
         email: '',
-        password: ''
+        password: '',
+        alert: true
       }
     },
     methods: {
       login () {
-        this.$store.dispatch('login', {usuario: this.email, password: this.password})
+        this.$store.dispatch('login', {correo: this.email, password: this.password})
+      },
+      keypressed (e) {
+        const code = (e.keyCode ? e.keyCode : e.which)
+        if (code === 13) {
+          this.login()
+        }
+      },
+      onClose () {
+        this.$store.commit('setError', null)
       }
     }
   }

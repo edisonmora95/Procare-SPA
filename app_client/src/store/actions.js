@@ -2,45 +2,52 @@ import router from '../router'
 import Vue from 'vue'
 
 export default {
-  login ({commit}, payload) {
-    Vue.http.get('/api/test')
+  login ({commit, dispatch}, payload) {
+    commit('setError', null)
+    commit('setLoading', true)
+    Vue.http.post('/api/login/', payload)
       .then((response) => {
+        commit('setLoading', false)
         console.log(response)
-        // Llamada a la API
-        const usuario = {
-          nombres: 'Edison André',
-          apellidos: 'Mora Cazar',
-          imagen: 'https://randomuser.me/api/portraits/men/85.jpg',
-          roles: []
+        if (response.body.status) {
+          Vue.http.headers.common['x-access-token'] = response.body.token
+          dispatch('getLoggedUser')
+        } else {
+          commit('setError', {mensaje: 'Credenciales incorrectas'})
         }
-        if (payload.usuario === 'animador@hotmail.com') {
-          usuario.roles = ['Animador']
-        }
-        if (payload.usuario === 'director_centro@hotmail.com') {
-          usuario.roles = ['Director Centro']
-        }
-        if (payload.usuario === 'personal@hotmail.com') {
-          usuario.roles = ['Personal']
-        }
-        if (payload.usuario === 'director_formacion@hotmail.com') {
-          usuario.roles = ['Director Procare Formación']
-        }
-        if (payload.usuario === 'animador_personal@hotmail.com') {
-          usuario.roles = ['Animador', 'Personal']
-        }
-        if (payload.usuario === 'animador_director_ejecutivo@hotmail.com') {
-          usuario.roles = ['Animador', 'Director Ejecutivo']
-        }
-        commit('setUsuario', usuario)
-        commit('setLoggedIn', true)
-        router.push('/')
       }, (err) => {
         console.log(err)
+        commit('setLoading', false)
+        commit('setError', {mensaje: 'Credenciales incorrectas'})
       })
   },
   logout ({commit}) {
-    commit('setUsuario', null)
-    commit('setLoggedIn', false)
-    router.push('/login')
+    commit('setLoggedIn', true)
+    Vue.http.get('/api/login/logout')
+      .then((response) => {
+        commit('setUsuario', null)
+        commit('setLoggedIn', false)
+        router.push('/login')
+      })
+  },
+  getLoggedUser ({commit}) {
+    commit('setError', null)
+    commit('setLoading', true)
+    Vue.http.get('/api/login/usuarios')
+      .then((response) => {
+        commit('setLoading', false)
+        console.log(response)
+        if (response.body.estado) {
+          commit('setUsuario', response.body.datos)
+          commit('setLoggedIn', true)
+          router.push('/')
+        } else {
+          commit('setError', response.body)
+        }
+      }, (err) => {
+        console.log(err)
+        commit('setLoading', false)
+        commit('setError', err)
+      })
   }
 }

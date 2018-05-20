@@ -5,6 +5,7 @@
     "database": "procare_db_dev",
     "host"    : "localhost",
     "dialect" : "mysql",
+    "secret": "una_opcion_por_cristo",
     "logging" : false,
     "cloudinary" : {
       "cloud_name" : "",

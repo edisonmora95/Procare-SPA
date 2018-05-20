@@ -10,5 +10,11 @@ export default {
   },
   setUsuario (state, payload) {
     state.usuario = payload
+  },
+  setLoading (state, payload) {
+    state.loading = payload
+  },
+  setError (state, payload) {
+    state.error = payload
   }
 }

@@ -144,7 +144,9 @@ export const store = new Vuex.Store({
       celular: '(##)#-###-####',
       convencional: '(##)###-####'
     },
-    loggedIn: false
+    loggedIn: false,
+    loading: false,
+    error: null
   },
   mutations,
   actions,

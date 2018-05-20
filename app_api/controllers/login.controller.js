@@ -79,7 +79,7 @@ const getUsuario = (req, res) => {
 	}
 	const datos = {
 		id 				: usuario.get('id'),
-		nombre 		: usuario.get('nombres'),
+		nombres		: usuario.get('nombres'),
 		apellidos : usuario.get('apellidos'),
 		genero    : usuario.get('genero'),
 		correo		: usuario.get('correo'),

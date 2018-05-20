@@ -25,5 +25,11 @@ export default {
   },
   loggedIn (state) {
     return state.loggedIn
+  },
+  error (state) {
+    return state.error
+  },
+  loading (state) {
+    return state.loading
   }
 }
