@@ -31,5 +31,8 @@ export default {
   },
   loading (state) {
     return state.loading
+  },
+  successMsg (state) {
+    return state.successMsg
   }
 }

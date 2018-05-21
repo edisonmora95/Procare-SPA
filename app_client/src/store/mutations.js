@@ -16,5 +16,8 @@ export default {
   },
   setError (state, payload) {
     state.error = payload
+  },
+  setSuccessMsg (state, payload) {
+    state.successMsg = payload
   }
 }

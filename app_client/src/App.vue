@@ -17,6 +17,9 @@
 export default {
   created () {
     // this.$store.dispatch('getLoggedUser')
+    if (this.usuario) {
+      this.$store.dispatch('getGrupos')
+    }
   },
   computed: {
     loggedIn () {
@@ -24,6 +27,13 @@ export default {
     },
     usuario () {
       return this.$store.getters.usuario
+    }
+  },
+  watch: {
+    usuario (value) {
+      if (value) {
+        this.$store.dispatch('getGrupos')
+      }
     }
   },
   data () {

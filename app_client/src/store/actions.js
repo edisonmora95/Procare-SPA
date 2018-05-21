@@ -49,5 +49,39 @@ export default {
         commit('setLoading', false)
         commit('setError', err)
       })
+  },
+  getGrupos ({commit}) {
+    commit('setError', null)
+    commit('setLoading', true)
+    Vue.http.get('api/grupos/')
+      .then((response) => {
+        commit('setLoading', false)
+        if (response.body.estado) {
+          commit('setGrupos', response.body.datos)
+        } else {
+          commit('setError', response.body)
+        }
+      }, (err) => {
+        console.log(err)
+        commit('setLoading', false)
+        commit('setError', err.body)
+      })
+  },
+  ingresarProcariano ({ commit }, payload) {
+    commit('setError', null)
+    commit('setLoading', true)
+    Vue.http.post('/api/procarianos/', payload)
+      .then((response) => {
+        commit('setLoading', false)
+        if (response.body.estado) {
+          commit('setSuccessMsg', {mensaje: 'Procariano creado'})
+        } else {
+          commit('setError', response.body)
+        }
+      }, (err) => {
+        console.log(err)
+        commit('setLoading', false)
+        commit('setError', err.body)
+      })
   }
 }

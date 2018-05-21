@@ -47,36 +47,7 @@ export const store = new Vuex.Store({
         grupo: 'Grupo del Chino'
       }
     ],
-    grupos: [
-      {
-        id: '1',
-        nombre: 'Grupo de Mario',
-        tipo: 'Formación',
-        etapa: 'Primera etapa',
-        genero: 'Masculino'
-      },
-      {
-        id: '2',
-        nombre: 'Grupo de Luis',
-        tipo: 'Formación',
-        etapa: 'Primera etapa',
-        genero: 'Masculino'
-      },
-      {
-        id: '3',
-        nombre: 'Grupo de Anita',
-        tipo: 'Formación',
-        etapa: 'Primera etapa',
-        genero: 'Femenino'
-      },
-      {
-        id: '4',
-        nombre: 'Grupo de Chalo',
-        tipo: 'Formación',
-        etapa: 'Segunda etapa',
-        genero: 'Masculino'
-      }
-    ],
+    grupos: [],
     etapas: [
       {
         id: '0',
@@ -146,7 +117,8 @@ export const store = new Vuex.Store({
     },
     loggedIn: false,
     loading: false,
-    error: null
+    error: null,
+    successMsg: null
   },
   mutations,
   actions,
