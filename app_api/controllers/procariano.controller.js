@@ -77,7 +77,6 @@ const crearProcariano = (req, res) => {
 		21/07/2017 @erialper, agrego la excepción de busquedad
 */
 const buscarProcariano = (req, res) => {
-	// var jsonModelo = utils.generarJsonProcariano(req.query);
   ModeloProcariano.obtenerProcarianosActivosP()
     .then((procarianos) => {
       const registro = procarianos.map( procariano => {
@@ -85,7 +84,8 @@ const buscarProcariano = (req, res) => {
           {},
           {
             personaId       :   procariano.Persona.id,
-            procarianoID    :   procariano.id ,
+            procarianoID    :   procariano.id,
+            cedula          :   procariano.Persona.cedula,
             colegio         :   procariano.colegio ,
             universidad     :   procariano.universidad ,
             nombres         :   procariano.Persona.nombres ,

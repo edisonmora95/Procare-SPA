@@ -1,7 +1,7 @@
 <template>
   <v-container fluid fill-height>
     <v-layout align-center justify-center wrap row>
-      <v-flex xs12 sm10 md8>
+      <v-flex xs12 sm10 md8 v-if="procariano && procariano !== undefined">
         <v-card class="elevation-12">
           <v-card-title primary-title>
             <h1 class="mx-auto display-1">Perfil Procariano</h1>
@@ -10,7 +10,7 @@
             <v-avatar size="150" class="mx-auto my-2">
               <img v-if="!procariano.imagen" src="http://via.placeholder.com/150x150">
               <img v-else :src="procariano.imagen">
-            </v-avatar>  
+            </v-avatar>
           </v-card-media>
           <v-card-actions>
             <v-tabs fixed-tabs grow slot="extension" v-model="tab">
@@ -35,7 +35,7 @@
                     </v-flex>
                     <v-flex xs12 sm6>
                       <label>Fecha de nacimiento</label>
-                      <p>{{ procariano.fechaNacimiento }}</p>
+                      <p>{{ procariano.fechaNacimiento | moment}}</p>
                     </v-flex>
                     <v-flex xs12 sm6>
                       <label>Cédula</label>
@@ -57,28 +57,28 @@
                   <v-layout wrap>
                     <v-flex xs12 sm6>
                       <label>Celular</label>
-                      <p>{{ procariano.celular }}</p>
+                      <p>{{ procariano.celular || '---' }}</p>
                     </v-flex>
                     <v-flex xs12 sm6>
                       <label>Convencional</label>
-                      <p>{{ procariano.convencional }}</p>
+                      <p>{{ procariano.convencional || '---' }}</p>
                     </v-flex>
                     <v-flex xs12 sm6>
                       <label>Colegio</label>
-                      <p>{{ procariano.colegio }}</p>
+                      <p>{{ procariano.colegio || '---' }}</p>
                     </v-flex>
                     <v-flex xs12 sm6>
                       <label>Universidad</label>
-                      <p>{{ procariano.universidad }}</p>
+                      <p>{{ procariano.universidad || '---' }}</p>
                     </v-flex>
                     <v-flex xs12 sm6>
                       <label>Dirección</label>
-                      <p>{{ procariano.direccion }}</p>
+                      <p>{{ procariano.direccion || '---' }}</p>
                     </v-flex>
                     <v-flex xs12 sm6>
                       <label>Trabajo</label>
-                      <p>{{ procariano.trabajo }}</p>
-                    </v-flex>    
+                      <p>{{ procariano.trabajo || '---' }}</p>
+                    </v-flex>
                   </v-layout>
                 </v-container>
               </v-tab-item>
@@ -91,16 +91,16 @@
                     </v-flex>
                     <v-flex xs12 sm6>
                       <label>Promoción</label>
-                      <p>{{ procariano.promocion }}</p>
+                      <p>{{ procariano.promocion || '---' }}</p>
                     </v-flex>
                     <v-flex xs12 sm6>
                       <label>Fecha Opción</label>
-                      <p>{{ procariano.fechaOpcion }}</p>
+                      <p>{{ procariano.fechaOpcion | moment }}</p>
                     </v-flex>
                     <v-flex xs12 sm6>
                       <label>Grupo</label>
                       <p>{{ procariano.grupo }}</p>
-                    </v-flex>    
+                    </v-flex>
                   </v-layout>
                 </v-container>
               </v-tab-item>
@@ -151,15 +151,31 @@
 </template>
 <script>
 export default {
+  created () {
+    let nombres = this.$route.params.id.split('-')[0]
+    if (nombres.split('_').length > 1) {
+      nombres = nombres.split('_')[0].concat(' ').concat(nombres.split('_')[1])
+    } else {
+      nombres = nombres.split('_')[0]
+    }
+    let apellidos = this.$route.params.id.split('-')[1]
+    if (apellidos.split('_').length > 1) {
+      apellidos = apellidos.split('_')[0].concat(' ').concat(apellidos.split('_')[1])
+    } else {
+      apellidos = apellidos.split('_')[0]
+    }
+    this.getProcariano(nombres, apellidos)
+  },
   computed: {
-    procariano () {
-      return this.$store.getters.procariano
+    procarianos () {
+      return this.$store.getters.procarianos
     }
   },
   data () {
     return {
       tab: 'tab-general',
-      modalEliminar: false
+      modalEliminar: false,
+      procariano: null
     }
   },
   methods: {
@@ -168,6 +184,11 @@ export default {
     },
     editar () {
       this.$router.push(this.$route.path + '/editar')
+    },
+    getProcariano (nombres, apellidos) {
+      this.procariano = this.procarianos.find((procariano) => {
+        return procariano.nombres === nombres && procariano.apellidos === apellidos
+      })
     }
   }
 }

@@ -81,7 +81,7 @@
                       </v-flex>
                       <v-flex xs12 sm6>
                         <v-text-field name="trabajo" label="Trabajo" v-model="procariano.trabajo" type="text" :rules="[rules.specialChar]"></v-text-field>
-                      </v-flex>    
+                      </v-flex>
                     </v-layout>
                   </v-container>
                 </v-tab-item>
@@ -89,7 +89,7 @@
                   <v-container grid-list-xl fluid>
                     <v-layout wrap>
                       <v-flex xs12 sm6>
-                        <v-select :items="tipos" v-model="procariano.tipo" label="Tipo"></v-select>
+                        <v-select :items="tipos" item-text="text" item-value="id" v-model="procariano.tipoId" label="Tipo"></v-select>
                       </v-flex>
                       <v-flex xs12 sm6>
                         <v-text-field name="promocion" v-model="procariano.promocion" label="Promoción" :rules="[rules.specialChar]"></v-text-field>
@@ -105,8 +105,8 @@
                         </v-dialog>
                       </v-flex>
                       <v-flex xs 12 sm6>
-                        <v-select :items="grupos" v-model="procariano.grupo" label="Grupo"></v-select>
-                      </v-flex>    
+                        <v-select :items="grupos" item-text="nombre" item-value="id" v-model="procariano.idGrupoNuevo" label="Grupo"></v-select>
+                      </v-flex>
                     </v-layout>
                   </v-container>
                 </v-tab-item>
@@ -158,6 +158,21 @@
 </template>
 <script>
 export default {
+  created () {
+    let nombres = this.$route.params.id.split('-')[0]
+    if (nombres.split('_').length > 1) {
+      nombres = nombres.split('_')[0].concat(' ').concat(nombres.split('_')[1])
+    } else {
+      nombres = nombres.split('_')[0]
+    }
+    let apellidos = this.$route.params.id.split('-')[1]
+    if (apellidos.split('_').length > 1) {
+      apellidos = apellidos.split('_')[0].concat(' ').concat(apellidos.split('_')[1])
+    } else {
+      apellidos = apellidos.split('_')[0]
+    }
+    this.getProcariano(nombres, apellidos)
+  },
   computed: {
     grupos () {
       return this.$store.getters.grupos
@@ -168,8 +183,8 @@ export default {
     masks () {
       return this.$store.getters.masks
     },
-    procariano () {
-      return this.$store.getters.procariano
+    procarianos () {
+      return this.$store.getters.procarianos
     }
   },
   data () {
@@ -178,6 +193,7 @@ export default {
       modalOpcion: '',
       modalEditar: false,
       tab: 'tab-general',
+      procariano: null,
       generos: [
         {
           texto: 'Masculino',
@@ -188,12 +204,49 @@ export default {
           id: 'femenino'
         }
       ],
-      tipos: ['Chico Formación', 'Caminante', 'Pescador', 'Pescador Consgagrado', 'Sacerdote', 'Mayor'],
+      tipos: [
+        {
+          id: 1,
+          text: 'Chico Formación'
+        },
+        {
+          id: 2,
+          text: 'Caminante'
+        },
+        {
+          id: 3,
+          text: 'Pescador'
+        },
+        {
+          id: 4,
+          text: 'Pescador Consgagrado'
+        },
+        {
+          id: 5,
+          text: 'Sacerdote'
+        },
+        {
+          id: 6,
+          text: 'Mayor'
+        }
+      ],
       formValid: true,
       alertError: false
     }
   },
   methods: {
+    getProcariano (nombres, apellidos) {
+      this.procariano = this.procarianos.find((procariano) => {
+        return procariano.nombres === nombres && procariano.apellidos === apellidos
+      })
+      this.procariano.fechaNacimiento = this.procariano.fechaNacimiento.split('T')[0]
+      this.procariano.tipoId = this.tipos.find((tipo) => {
+        return tipo.text === this.procariano.tipo
+      })
+      this.procariano.idGrupoNuevo = this.grupos.find((grupo) => {
+        return grupo.nombre === this.procariano.grupo
+      })
+    },
     pickFile () {
       this.$refs.fileInput.click()
     },

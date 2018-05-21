@@ -97,7 +97,7 @@
       perfil (nombres, apellidos) {
         nombres = nombres.replace(' ', '_')
         apellidos = apellidos.replace(' ', '_')
-        nombres = nombres.concat('_')
+        nombres = nombres.concat('-')
         nombres = nombres.concat(apellidos)
         this.$router.push('/procarianos/perfil/' + nombres)
       }

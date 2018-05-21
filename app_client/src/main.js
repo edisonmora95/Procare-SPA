@@ -4,6 +4,7 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import money from 'v-money'
+import moment from 'moment'
 
 import App from './App'
 import router from './router'
@@ -16,6 +17,13 @@ Vue.use(money, {precision: 2})
 Vue.config.productionTip = false
 
 Vue.component('navbar', NavBar)
+
+Vue.filter('moment', (value) => {
+  if (value) {
+    moment.locale('es')
+    return moment(value).format('LL')
+  }
+})
 
 /* eslint-disable no-new */
 new Vue({
