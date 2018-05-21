@@ -2,6 +2,9 @@ export default {
   setProcariano (state, payload) {
     state.procariano = payload
   },
+  setProcarianos (state, payload) {
+    state.procarianos = payload
+  },
   setGrupos (state, payload) {
     state.grupos = payload
   },

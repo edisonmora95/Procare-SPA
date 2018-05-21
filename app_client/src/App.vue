@@ -19,6 +19,7 @@ export default {
     // this.$store.dispatch('getLoggedUser')
     if (this.usuario) {
       this.$store.dispatch('getGrupos')
+      this.$store.dispatch('getProcarianos')
     }
   },
   computed: {
@@ -33,6 +34,7 @@ export default {
     usuario (value) {
       if (value) {
         this.$store.dispatch('getGrupos')
+        this.$store.dispatch('getProcarianos')
       }
     }
   },

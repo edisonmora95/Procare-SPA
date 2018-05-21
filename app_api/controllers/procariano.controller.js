@@ -27,7 +27,7 @@ const ModeloGrupo 					= require('../models/').Grupo;
 		* Si el usuario ingresó un grupo, se crea su registro en ProcarianoGrupo
 		* Si el usuario ingresó un tipo, se crea su registro en ProcarianoTipo
 		* Es obligatorio que ingrese un tipo. Si no se ingresa, no se crea el Procariano.
-	@Modificado: 
+	@Modificado:
 		21/07/2017 @edisonmora95	promesas y transacciones
 		18/02/2018	@edisonmora95	Reorganización en Controller de Persona
 */
@@ -43,7 +43,7 @@ const crearProcariano = (req, res) => {
 
 	let t 							 = res.locals.t;
 	procariano.PersonaId = res.locals.idPersona;
-	
+
 	const idGrupo 			= req.body.grupo;
 	const idTipo 				= req.body.tipo;
 	let mensaje 				=	'Procariano creado correctamente.';
@@ -72,52 +72,46 @@ const crearProcariano = (req, res) => {
 /*
 	@Autor : JV
 	@FechaCreacion : 28/05/2017
-	@Modificado: 
+	@Modificado:
 		07/07/2017 @Jv , agregado metodo generar JsonProcariano
 		21/07/2017 @erialper, agrego la excepción de busquedad
 */
 const buscarProcariano = (req, res) => {
-	var jsonModelo = utils.generarJsonProcariano(req.query);
-	ModeloProcariano.findAll({
-	    include: [{
-	        model: ModeloPersona ,
-	        where: jsonModelo.persona
-	    }], where : jsonModelo.procariano//aqui va el where
-	    
-	}).then( procarianos => {
-		const registro = procarianos.map( procariano => {
-			return Object.assign(
-				{},
-				{
-					personaId 			: 	procariano.Persona.id,
-					procarianoID 		: 	procariano.id ,
-					colegio 				: 	procariano.colegio ,
-					universidad 		: 	procariano.universidad ,
-					parroquia 			: 	procariano.parroquia ,
-					fechaOrdenacion : 	procariano.fechaOrdenacion ,
-					cedula 					: 	procariano.Persona.cedula ,
-					nombres 				: 	procariano.Persona.nombres ,
-					apellidos 			: 	procariano.Persona.apellidos ,
-					direccion 			: 	procariano.Persona.direccion ,
-					genero 					: 	procariano.Persona.genero ,
-					fechaNacimiento : 	procariano.Persona.fechaNacimiento ,
-					convencional 		: 	procariano.Persona.convencional ,
-					celular 				: 	procariano.Persona.celular ,
-					trabajo 				: 	procariano.Persona.trabajo,
-					email						: 	procariano.Persona.email,
-					estado					: 	procariano.estado
-				});
-		});
-
-		return respuesta.okGet(res, 'Búsqueda exitosa', registro);
-	}).catch( error => {
-		return respuesta.error(res, 'No se obtuvieron procarianos', '', error);
-	});
+	// var jsonModelo = utils.generarJsonProcariano(req.query);
+  ModeloProcariano.obtenerProcarianosActivosP()
+    .then((procarianos) => {
+      const registro = procarianos.map( procariano => {
+        return Object.assign(
+          {},
+          {
+            personaId       :   procariano.Persona.id,
+            procarianoID    :   procariano.id ,
+            colegio         :   procariano.colegio ,
+            universidad     :   procariano.universidad ,
+            nombres         :   procariano.Persona.nombres ,
+            apellidos       :   procariano.Persona.apellidos ,
+            direccion       :   procariano.Persona.direccion ,
+            genero          :   procariano.Persona.genero ,
+            fechaNacimiento :   procariano.Persona.fechaNacimiento ,
+            convencional    :   procariano.Persona.convencional ,
+            celular         :   procariano.Persona.celular ,
+            trabajo         :   procariano.Persona.trabajo,
+            email           :   procariano.Persona.email,
+            estado          :   procariano.estado,
+            grupo           :   obtenergrupoActual(procariano.Grupos).nombre,
+            tipo            :   obtenerTipoActual(procariano.Tipos).nombre
+          });
+      });
+      return respuesta.okGet(res, 'Búsqueda exitosa', registro);
+    })
+    .catch((err) => {
+      return respuesta.error(res, 'No se obtuvieron procarianos', '', error);
+    })
 };
 
 /*
 	@Autor: Erick Perez
-	@Modificado: 	
+	@Modificado:
 		22/08/2017 	@edisonmora95,	Cambio de nombre de función
 																Pasada función a modelo.
 		16/09/2017	@edisonmora95,	Cambiado a promesas. Una sola función en ModeloProcariano
@@ -138,9 +132,9 @@ const buscarProcarianosActivos = (req, res) => {
 	@FechaCreacion : 28/05/2017
 	@Descripción:
 		Devuelve la información de Persona, Procariano, ProcarianoGrupo y ProcarianoTipo
-	@Modificado: 
+	@Modificado:
 		07/07/2017 	@JV , 					para que modifique por ID
-		21/07/2017	@erialper , 		para que devuelva el tipo de procariano, agrego la excepción de busquedad	
+		21/07/2017	@erialper , 		para que devuelva el tipo de procariano, agrego la excepción de busquedad
 		23/07/2017 	@edisonmora95 , luego de obtener el id del tipo, también obtiene el nombre del tipo
 		15/09/2017 	@edisonmora95 ,	cambiado a promesas. Una sola función en ModeloProariano
 		18/02/2018	@edisonmora95, 	Modificado formato de respuesta de error
@@ -172,7 +166,7 @@ const buscarProcarianoPorId = (req, res) => {
 	@Descripción:
 		*	Primero actualiza la información de la Persona
 		*	Luego actualiza la información del Procariano
-	@Modificado: 
+	@Modificado:
 		07/07/2017 @JV , agregado date a datos date
 		22/07/2017 @erialper, agregado el cambio de tipo
 		16/09/2017 @edisonmora95 , 	cambiado a promesas.
@@ -215,13 +209,13 @@ const editarProcariano = (req, res, next) => {
 		*	Primero cambio el estado
 		*	Luego, pongo fechaFin al tipo del procariano
 		*	Luego, pongo fechaFin al grupo del procariano
-	@Modificado: 
+	@Modificado:
 		21/07/2017 @erialper , agrega eliminar el tipo y el grupo
 		16/09/2017 @edisonmora95 , 	cambiado a promesas.
 */
 const eliminarProcariano = (req, res) => {
 	var idPersona = req.params.id;
-	
+
 	co(function* (){
 		let t 							=	yield inicializarTransaccion();
 		const procarianoDel	=	yield ModeloProcariano.eliminarProcarianoT(idPersona, t);
@@ -233,9 +227,9 @@ const eliminarProcariano = (req, res) => {
 			const tipoActual 		= yield ModeloProcarianoTipo.obtenerTipoActualDeProcarianoP(idProcariano);
 			if( tipoActual != null ){
 				const idTipoActual 	= tipoActual.get('TipoId');
-				yield ModeloProcarianoTipo.anadirFechaFinT(idProcariano, idTipoActual,t);	
+				yield ModeloProcarianoTipo.anadirFechaFinT(idProcariano, idTipoActual,t);
 			}
-			
+
 			//Elimino sus registros de grupo
 			const grupoActual = yield ModeloProcarianoGrupo.obtenerGrupoActualDeProcarianoP(idProcariano);
 			if( grupoActual != null ){
@@ -253,7 +247,7 @@ const eliminarProcariano = (req, res) => {
 			t.rollback();
 			return respuesta.errorDelete(res, 'Ocurrió un error al tratar de eliminar al Procariano', null);
 		}
-		
+
 	}).catch( fail => {
 		return respuesta.error(res, 'No se pudo eliminar al procariano', '', fail);
 	});
@@ -265,7 +259,7 @@ const eliminarProcariano = (req, res) => {
 		Primero busca a todos los chicos de Procare Formación
 		Luego busca a los que estan en grupo
 		Filtra los que no tienen grupo actualmente
-	@Modificado: 
+	@Modificado:
 		21/07/2017 @erialper , agrega eliminar el tipo y el grupo
 		16/09/2017 @edisonmora95 , 	cambiado a promesas.
 		19/02/2018 @edisonmora95,	cambiado a Promise.all
@@ -294,7 +288,7 @@ const buscarChicosFormacionSinGrupo = (req, res) => {
 
 /*
 	@Autor : @edisonmora95
-	@Modificado: 
+	@Modificado:
 		21/07/2017 @erialper , agrega eliminar el tipo y el grupo
 		16/09/2017 @edisonmora95 , 	cambiado a promesas.
 */
@@ -352,7 +346,7 @@ const chicoEnGrupo = (chico, array) => {
 	let flag = false;
 	for (let i = 0; i < array.length; i++) {
 		chicoEnGrupo = array[i];
-		if(chico.procarianoId === chicoEnGrupo.ProcarianoId){	
+		if(chico.procarianoId === chicoEnGrupo.ProcarianoId){
 			flag = true;
 			break;
 		}

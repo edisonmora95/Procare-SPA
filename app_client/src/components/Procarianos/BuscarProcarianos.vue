@@ -1,36 +1,18 @@
 <template>
   <v-container fluid fill-height>
     <v-layout align-center justify-center wrap row>
-      <v-flex xs12 sm10 md8>
+      <v-flex xs12 sm10 md8 class="mt-3">
         <v-card>
           <v-card-title primary-title>
-            <h1 class="mx-auto">Búsqueda</h1>
+            <h1 class="mx-auto">Procarianos</h1>
           </v-card-title>
           <v-card-text>
-            <v-form class="px-3 mt-3">
-              <v-layout row wrap>
-                <v-flex xs12 v-for="tf in textFields" :key="tf.name">
-                  <v-text-field :name="tf.name" :label="tf.label" v-model="tf.model"></v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-form>
-          </v-card-text>
-          <v-card-actions class="pb-3">
-            <v-spacer></v-spacer>
-            <v-btn class="error mr-3" icon>
-              <v-icon>add</v-icon>
-            </v-btn>
-            <v-btn flat class="primary mr-4" @click="buscar">Buscar</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-flex>
-      <v-flex xs12 sm10 md8 class="mt-3" v-if="busquedaRealizada">
-        <v-card>
-          <v-card-title primary-title>
-            <h1 class="mx-auto">Resultados</h1>
-          </v-card-title>
-          <v-card-text>
-            <v-data-table :headers="dataTable.headers" :items="dataTable.items" class="elevation-1" :loading="dataTable.loading">
+            <v-layout row class="mb-3">
+              <v-flex xs6 offset-xs6>
+               <v-text-field v-model="dataTable.search" append-icon="search" label="Búsqueda" single-line hide-details></v-text-field>
+              </v-flex>
+            </v-layout>
+            <v-data-table :headers="dataTable.headers" :items="procarianos" :search="dataTable.search" class="elevation-1" :loading="loading">
               <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
               <template slot="items" slot-scope="props">
                 <td>
@@ -46,10 +28,13 @@
                 <td>{{ props.item.estado }}</td>
               </template>
               <template slot="no-data">
-                <v-alert :value="dataTable.error" color="error" icon="warning">
-                  No se encontraron resultados para su búsqueda
+                <v-alert :value="error" dismissible color="error" icon="warning" v-if="error">
+                  No se pudieron cargar los datos de la base.
                 </v-alert>
               </template>
+              <v-alert slot="no-results" :value="true" color="error" icon="warning">
+                Su búsqueda de "{{ dataTable.search }}" no encontró resultados.
+              </v-alert>
             </v-data-table>
           </v-card-text>
         </v-card>
@@ -60,29 +45,18 @@
 <script>
   export default {
     computed: {
-      textFields () {
-        return this.checkboxes.filter((field) => {
-          return field.state === true
-        })
+      loading () {
+        return this.$store.getters.loading
+      },
+      error () {
+        return this.$store.getters.error
+      },
+      procarianos () {
+        return this.$store.getters.procarianos
       }
     },
     data () {
       return {
-        procariano: {
-          nombres: '',
-          apellidos: '',
-          fechaNacimiento: '',
-          cedula: '',
-          genero: '',
-          tipo: '',
-          colegio: '',
-          universidad: '',
-          trabajo: '',
-          fechaOpcion: '',
-          promocion: '',
-          grupo: ''
-        },
-        busquedaRealizada: false,
         dataTable: {
           headers: [
             {
@@ -114,41 +88,12 @@
               value: 'estado'
             }
           ],
-          items: [],
-          loading: false,
+          search: '',
           error: false
-        },
-        checkboxes: [
-          {
-            label: 'Nombres',
-            name: 'nombres',
-            model: 'procariano.nombres',
-            state: true
-          },
-          {
-            label: 'Apellidos',
-            name: 'apellidos',
-            model: 'procariano.apellidos',
-            state: false
-          },
-          {
-            label: 'Email',
-            name: 'email',
-            model: 'procariano.email',
-            state: false
-          }
-        ]
+        }
       }
     },
     methods: {
-      buscar () {
-        this.busquedaRealizada = true
-        this.dataTable.loading = true
-        setTimeout(() => {
-          this.dataTable.items = this.$store.getters.procarianos
-          this.dataTable.loading = false
-        }, 3000)
-      },
       perfil (nombres, apellidos) {
         nombres = nombres.replace(' ', '_')
         apellidos = apellidos.replace(' ', '_')

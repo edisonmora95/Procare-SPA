@@ -83,5 +83,22 @@ export default {
         commit('setLoading', false)
         commit('setError', err.body)
       })
+  },
+  getProcarianos ({ commit }) {
+    commit('setError', null)
+    commit('setLoading', true)
+    Vue.http.get('/api/procarianos')
+      .then((response) => {
+        commit('setLoading', false)
+        if (response.body.estado) {
+          commit('setProcarianos', response.body.datos)
+        } else {
+          commit('setError', response.body)
+        }
+      }, (err) => {
+        commit('setLoading', false)
+        commit('setError', err.body)
+        console.log(err)
+      })
   }
 }

@@ -31,22 +31,7 @@ export const store = new Vuex.Store({
       fechaOpcion: '2014-06-31',
       grupo: 'Grupo del Chino'
     },
-    procarianos: [
-      {
-        nombres: 'Edison André',
-        apellidos: 'Mora Cazar',
-        email: 'edanmora@espol.edu.ec',
-        tipo: 'Caminante',
-        grupo: 'Grupo del Chino'
-      },
-      {
-        nombres: 'Mario',
-        apellidos: 'Giler',
-        email: 'mario@hotmail.com',
-        tipo: 'Caminante',
-        grupo: 'Grupo del Chino'
-      }
-    ],
+    procarianos: [],
     grupos: [],
     etapas: [
       {
