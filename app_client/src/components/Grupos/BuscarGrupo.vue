@@ -18,7 +18,7 @@
                 ></v-text-field>
               </v-flex>
             </v-layout>
-            <v-data-table :headers="dataTable.headers" :items="dataTable.items" class="elevation-1" :loading="dataTable.loading" :search="dataTable.search" hide-actions>
+            <v-data-table :headers="dataTable.headers" :items="grupos" class="elevation-1" :loading="dataTable.loading" :search="dataTable.search" hide-actions>
               <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
               <template slot="items" slot-scope="props">
                 <td>
@@ -46,7 +46,12 @@
 <script>
 export default {
   mounted () {
-    this.obtenerGrupos()
+    this.$store.dispatch('getGrupos')
+  },
+  computed: {
+    grupos () {
+      return this.$store.getters.grupos
+    }
   },
   data () {
     return {
@@ -81,13 +86,6 @@ export default {
     }
   },
   methods: {
-    obtenerGrupos () {
-      this.dataTable.loading = true
-      setTimeout(() => {
-        this.dataTable.items = this.$store.getters.grupos
-        this.dataTable.loading = false
-      }, 3000)
-    },
     perfil (nombre) {
       nombre = nombre.replace(' ', '_')
       this.$router.push('/grupos/' + nombre)
@@ -96,5 +94,5 @@ export default {
 }
 </script>
 <style scoped>
-  
+
 </style>

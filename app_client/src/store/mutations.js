@@ -8,6 +8,9 @@ export default {
   setGrupos (state, payload) {
     state.grupos = payload
   },
+  addGrupo (state, payload) {
+    state.grupos.push(payload)
+  },
   setLoggedIn (state, payload) {
     state.loggedIn = payload
   },

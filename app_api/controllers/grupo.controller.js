@@ -29,7 +29,7 @@ const fechasPM = ["2018-01-30", "2018-02-06", "2018-02-13", "2018-02-20", "2018-
 		Primero se crea el registro en la tabla Grupos
 		Luego se lo añade al grupo a una etapa, se crea el registro en la tabla GrupoEtapa
 		Se pasa el control al siguiente middleware que es el de Animador
-	@ÚltimaModificación: 
+	@ÚltimaModificación:
 		13/09/2017 @edisonmora95 Cambiado a promesas y transacciones
 		11/02/2018 @edisonmora95 Cambiado a varios middlewares
 */
@@ -70,7 +70,7 @@ module.exports.crearGrupo = (req, res, next) => {
 		Luego se cambia al animador, si el usuario ingresó un animador nuevo.
 			Queda por revisar lo siguiente:
 			Si el nuevo animador no está registrado como usuario, debe registrarse
-	@ÚltimaModificación: 
+	@ÚltimaModificación:
 		13/09/2017 @edisonmora95 Cambiado a promesas y transacciones
 		26/02/2018	@edisonmora95	Añadidos controllers nuevos
 */
@@ -104,8 +104,8 @@ module.exports.editarGrupo = (req, res, next) => {
 				res.locals.t     = t;
 				next();
 			}else{
-				t.commit();				
-				return respuesta.okUpdate(res, 'Se editó el grupo correctamente.', res.locals.datos);	
+				t.commit();
+				return respuesta.okUpdate(res, 'Se editó el grupo correctamente.', res.locals.datos);
 			}
 		})
 		.catch( fail => {
@@ -125,7 +125,7 @@ module.exports.editarGrupo = (req, res, next) => {
 		Luego se eliminan todos los registros del grupo de la tabla de ProcarianoGRupo
 		Luego se eliminan todos los registros del grupo de la tabla EtapaGrupo
 		Finalmente se elimina el grupo
-	@ÚltimaModificación: 
+	@ÚltimaModificación:
 		13/09/2017 @edisonmora95 Cambiado a promesas y transacciones
 */
 module.exports.eliminarGrupo = (req, res) => {
@@ -155,12 +155,22 @@ module.exports.eliminarGrupo = (req, res) => {
 
 /*
 	@Autor: @GustavoTotoy
-	@ÚltimaModificación: 
+	@ÚltimaModificación:
 */
 module.exports.mostrarGrupos = (req, res) => {
 	ModeloGrupo.obtenerTodosLosGruposP()
 	.then( grupos => {
-		return respuesta.okGet(res, 'Se obtuvieron los grupos', grupos);
+    let grupos2 = grupos.map((grupo) => {
+      return {
+        id:             grupo.id,
+        nombre:         grupo.nombre,
+        tipo:           grupo.tipo,
+        genero:         grupo.genero,
+        etapa:          obtenerEtapaActual(grupo.Etapas),
+        cantidadChicos: grupo.cantidadChicos
+      }
+    })
+		return respuesta.okGet(res, 'Se obtuvieron los grupos', grupos2);
 	})
 	.catch( error => {
 		return respuesta.error(res, 'No se pudieron obtener los grupos', '', error);
@@ -224,7 +234,7 @@ module.exports.anadirProcarianosAGrupo = (req, res) => {
 	@Descripción:
 		Primero se obtiene la información del grupo, el animador y los procarianos del grupo
 		Luego la información completa del animador
-	@ÚltimaModificación: 
+	@ÚltimaModificación:
 		13/09/2017 @edisonmora95 Cambiado a promesas y transacciones
 		11/02/2018	@edisonmora95	Promise.all
 */
@@ -280,3 +290,11 @@ function inicializarTransaccion(){
 	});
 }
 
+function obtenerEtapaActual (etapas) {
+  if (etapas.length === 0) {
+    return null
+  }
+  return etapas.find((etapa) => {
+    return etapa.GrupoEtapa.fechaFin === null
+  }).nombre
+}

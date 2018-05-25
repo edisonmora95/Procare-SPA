@@ -44,6 +44,9 @@
 </template>
 <script>
   export default {
+    mounted () {
+      this.$store.dispatch('getProcarianos')
+    },
     computed: {
       loading () {
         return this.$store.getters.loading

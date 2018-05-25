@@ -32,7 +32,7 @@ const ModeloGrupo 					= require('../models/').Grupo;
 		18/02/2018	@edisonmora95	Reorganización en Controller de Persona
 */
 const crearProcariano = (req, res) => {
-	let fechaOrdenacion = ( req.body.fechaOrdenacion === '' ) ? null : new Date(req.body.fechaOrdenacion);
+	let fechaOrdenacion = ( req.body.fechaOrdenacion === '' || !req.body.fechaOrdenacion ) ? null : new Date(req.body.fechaOrdenacion);
 	let procariano 			= {
 		colegio 				: req.body.colegio,
 		universidad 		: req.body.universidad,

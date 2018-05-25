@@ -16,7 +16,7 @@
 <script>
 export default {
   created () {
-    // this.$store.dispatch('getLoggedUser')
+    this.$store.dispatch('getLoggedUser')
     if (this.usuario) {
       this.$store.dispatch('getGrupos')
       this.$store.dispatch('getProcarianos')

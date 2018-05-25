@@ -53,7 +53,7 @@ export default {
   getGrupos ({commit}) {
     commit('setError', null)
     commit('setLoading', true)
-    Vue.http.get('api/grupos/')
+    Vue.http.get('/api/grupos/')
       .then((response) => {
         commit('setLoading', false)
         if (response.body.estado) {

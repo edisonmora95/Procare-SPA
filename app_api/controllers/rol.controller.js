@@ -19,7 +19,7 @@ const ModeloPersona 	 = require('../models/').Persona;
 	@Descripción:
 		Se crea el registro del nuevo rol de la persona
 		Se genera la contraseña y se la envía al cliente por correo
-	@ÚltimaModificación: 
+	@ÚltimaModificación:
 */
 module.exports.asignarRol = (req, res, next) => {
 	let t         = res.locals.t;
