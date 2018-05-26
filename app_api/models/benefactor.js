@@ -99,11 +99,11 @@ module.exports = function(sequelize, DataTypes) {
     },
   }, {
     classMethods: {
-      
+
       ///////////////////////////////////////
       //FUNDIONES CON TRANSACCIONES
       ///////////////////////////////////////
-      
+
      }
   });
   Benefactor.associate = (models)  => {
@@ -172,7 +172,7 @@ module.exports = function(sequelize, DataTypes) {
   }
   /*
     @Descripción : Crea un registro en la tabla Benfecator de la base de datos a partir de una transacción
-    @Params      : 
+    @Params      :
       benefactor  : Objeto con la información del Benfactor a crear
       transaction : Transacción para crear al Benefactor
     @Return      : Promesa con la información del Benefactor creado

@@ -19,7 +19,7 @@ const ModeloPersona	= require('../models/').Persona;
 	@Descripción:
 		*	Se crea el registro de Persona
 		*	Se pasa al siguiente controlador
-	@Modificado: 
+	@Modificado:
 */
 module.exports.crearPersona = (req, res, next) => {
 	let fechaNacimiento = ( req.body.fechaNacimiento === '' ) ? null : new Date(req.body.fechaNacimiento);
@@ -39,15 +39,16 @@ module.exports.crearPersona = (req, res, next) => {
 	inicializarTransaccion()
 	.then( t => {
 		ModeloPersona.crearPersonaT(persona, t)
-		.then( personaCreada => {
-			res.locals.t 				 = t;
-			res.locals.idPersona = personaCreada.get('id');
-			next();
-		})
-		.catch( fail => {
-			t.rollback();
-			return respuesta.ERROR_SERVIDOR(res, fail);
-		});
+  		.then( personaCreada => {
+        console.log('PERSONA CREADA')
+  			res.locals.t 				 = t;
+  			res.locals.idPersona = personaCreada.get('id');
+  			next();
+  		})
+  		.catch( fail => {
+  			t.rollback();
+  			return respuesta.ERROR_SERVIDOR(res, fail);
+  		});
 	})
 	.catch( fail => {
 		return respuesta.ERROR_SERVIDOR(res, fail);
@@ -118,14 +119,16 @@ module.exports.buscarPorCedula = (req, res, next) => {
 	ModeloPersona.buscarPersonaPorCedulaP(identificacion)
 	.then( registro => {
 		if( !registro ) {
+      console.log('NO ENCONTRÓ REGISTRO')
 			if( req.body.tipo === 'persona' ) {
-				this.crearPersona(req, res, next);	
+				this.crearPersona(req, res, next);
 			} else if ( req.body.tipo === 'empresa' ) {
 				this.crearEmpresa(req, res, next);
 			} else {
 				return respuesta.ERROR_SERVIDOR(res, { mensaje : 'Tipo de benefactor incorrecto' } );
 			}
 		} else {
+      console.log('ENCONTRÓ REGISTRO')
 			inicializarTransaccion()
 			.then( t => {
 				res.locals.t = t;

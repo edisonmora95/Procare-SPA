@@ -66,7 +66,7 @@ router.post('/',
 	*	@apiError (ERROR_SERVIDOR) {Object}  error		Descripción del error ocurrido.
 */
 router.get('/',
-						authApi.verifyRol(['Personal', 'Admin']),
+						authApi.verifyRol(['Personal', 'Admin', 'Director Ejecutivo']),
 						controladorGrupo.mostrarGrupos
 					);
 

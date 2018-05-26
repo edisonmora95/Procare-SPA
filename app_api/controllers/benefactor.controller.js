@@ -14,7 +14,7 @@ const ModeloBenefactor  = require('../models/').Benefactor;
 /*
   Autor : JOSE ALCIVAR
   Creado : 06/08/2017
-  Modificado: 
+  Modificado:
     06/08/2017 @josealcivar agrega un benefactor
     05/03/2018  @edisonmora95 Cambiado a varios Controllers
 */
@@ -26,7 +26,7 @@ const crearBenefactor = (req, res) => {
     diaCobro          : req.body.diaCobro,
     tarjetaCredito    : req.body.tarjetaCredito,
     tipoDonacion      : req.body.tipoDonacion,
-    estado            : req.body.estado,
+    estado            : 'activo',
     nombreGestor      : req.body.nombreGestor,
     relacion          : req.body.relacion,
     observacion       : req.body.observacion
@@ -159,7 +159,7 @@ const buscarBenefactorNombres = (req, res, next) => {
 Autor : JV
 Creado : 28/05/2017
 Modificado: 07/07/2017 @JV , para que modifique por ID
-            21/07/2017 @erialper , para que devuelva el tipo de procariano, agrego la excepción de busquedad    
+            21/07/2017 @erialper , para que devuelva el tipo de procariano, agrego la excepción de busquedad
             23/07/2017 @edanmora , luego de obtener el id del tipo, también obtiene el nombre del tipo
 */
 

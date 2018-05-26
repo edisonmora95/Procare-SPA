@@ -12,25 +12,6 @@ Vue.use(VueResource)
 export const store = new Vuex.Store({
   state: {
     usuario: null,
-    procariano: {
-      imagen: 'https://www.dccomics.com/sites/default/files/GalleryComics_1920x1080_20151216_SM_AM_AL_2_56567f3794d3e1.43316572.jpg',
-      nombres: 'Edison André',
-      apellidos: 'Mora Cazar',
-      fechaNacimiento: '1995-06-27',
-      cedula: '0927102848',
-      genero: 'masculino',
-      email: 'edanmora@espol.edu.ec',
-      celular: '0992556793',
-      convencional: '042348515',
-      colegio: 'Liceo Panamericano',
-      universidad: 'Espol',
-      direccion: 'Cdla. Coviem Mz. 17 V 6',
-      trabajo: '',
-      tipo: 'Caminante',
-      promocion: '',
-      fechaOpcion: '2014-06-31',
-      grupo: 'Grupo del Chino'
-    },
     procarianos: [],
     grupos: [],
     etapas: [
@@ -57,29 +38,6 @@ export const store = new Vuex.Store({
       {
         id: '5',
         texto: 'Quinta etapa'
-      }
-    ],
-    benefactores: [
-      {
-        nombre: 'Benefactor Uno',
-        cedula: '0927104555',
-        email: 'benefactor_1@gmail.com',
-        estado: 'activo',
-        gestor: 'Fernando Icaza'
-      },
-      {
-        nombre: 'Benefactor Dos',
-        cedula: '0927104666',
-        email: 'benefactor_2@gmail.com',
-        estado: 'activo',
-        gestor: 'Fernando Icaza'
-      },
-      {
-        nombre: 'Benefactor Tres',
-        cedula: '0927104999',
-        email: 'benefactor_3@gmail.com',
-        estado: 'activo',
-        gestor: 'Mario Montalván'
       }
     ],
     rules: {

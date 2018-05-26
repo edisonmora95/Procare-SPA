@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     perfil (nombre) {
-      nombre = nombre.replace(' ', '_')
+      nombre = nombre.replace(/\s/g, '_')
       this.$router.push('/grupos/' + nombre)
     }
   }

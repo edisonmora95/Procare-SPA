@@ -18,19 +18,19 @@
                 ></v-text-field>
               </v-flex>
             </v-layout>
-            <v-data-table :headers="dataTable.headers" :items="dataTable.items" class="elevation-1" :loading="dataTable.loading" :search="dataTable.search" hide-actions>
+            <v-data-table :headers="dataTable.headers" :items="benefactores" class="elevation-1" :loading="dataTable.loading" :search="dataTable.search" hide-actions>
               <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
               <template slot="items" slot-scope="props">
                 <td>
-                  <v-btn icon @click.native="perfil(props.item.nombre)">
+                  <v-btn icon @click.native="perfil(props.item.nombres)">
                     <v-icon>person</v-icon>
                   </v-btn>
                 </td>
-                <td>{{ props.item.nombre }}</td>
+                <td>{{ props.item.nombres }}</td>
                 <td>{{ props.item.cedula }}</td>
                 <td>{{ props.item.email }}</td>
                 <td>{{ props.item.estado }}</td>
-                <td>{{ props.item.gestor }}</td>
+                <td>{{ props.item.nombreGestor }}</td>
               </template>
               <template slot="no-data">
                 <v-alert :value="dataTable.error" color="error" icon="warning">
@@ -47,10 +47,11 @@
 <script>
 export default {
   mounted () {
-    this.obtenerBenefactores()
+    this.getBenefactores()
   },
   data () {
     return {
+      benefactores: [],
       dataTable: {
         search: '',
         headers: [
@@ -86,20 +87,30 @@ export default {
     }
   },
   methods: {
-    obtenerBenefactores () {
+    getBenefactores () {
       this.dataTable.loading = true
-      setTimeout(() => {
-        this.dataTable.items = this.$store.getters.benefactores
-        this.dataTable.loading = false
-      }, 3000)
+      this.dataTable.error = false
+      this.$http.get('/api/benefactores/')
+        .then((response) => {
+          this.dataTable.loading = false
+          if (response.body.estado) {
+            this.benefactores = response.body.datos
+          } else {
+            this.dataTable.error = true
+          }
+        }, (err) => {
+          console.log(err)
+          this.dataTable.loading = false
+          this.dataTable.error = true
+        })
     },
     perfil (nombre) {
-      nombre = nombre.replace(' ', '_')
+      nombre = nombre.replace(/_/g, '_')
       this.$router.push('/benefactores/' + nombre)
     }
   }
 }
 </script>
 <style scoped>
-  
+
 </style>

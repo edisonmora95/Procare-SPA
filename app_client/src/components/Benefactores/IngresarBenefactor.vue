@@ -1,6 +1,16 @@
 <template>
   <v-container fluid fill-height>
     <v-layout align-center justify-center wrap row>
+      <v-dialog v-model="successDialog" persistent max-width="290">
+        <v-card>
+          <v-card-title class="headline">Benefactor ingresado</v-card-title>
+          <v-card-text>Se añadió correctamente a la base de datos</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" flat @click.native="regresar">OK</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <v-flex xs12 sm10 md8>
         <v-card>
           <v-card-title primary-title>
@@ -10,7 +20,7 @@
             <v-form class="mb-3">
               <fieldset>
                 <h3 class="headline mt-3">Tipo</h3>
-                <v-radio-group v-model="benefactor.tipo" row>
+                <v-radio-group v-model="benefactor.tipo" row id="radioTipo">
                   <v-radio label="Persona" value="persona"></v-radio>
                   <v-radio label="Empresa" value="empresa"></v-radio>
                 </v-radio-group>
@@ -98,7 +108,7 @@
                       <v-text-field name="diaCobro" label="Día de cobro" v-model="benefactor.diaCobro"></v-text-field>
                     </v-flex>
                     <v-flex xs12 sm6>
-                      <v-text-field name="gestor" label="Gestor" v-model="benefactor.gestor"></v-text-field>
+                      <v-text-field name="gestor" label="Gestor" v-model="benefactor.nombreGestor"></v-text-field>
                     </v-flex>
                     <v-flex xs12 sm6>
                       <v-select label="Estado" :items="['Activo', 'Inactivo']" v-model="benefactor.estado"></v-select>
@@ -114,7 +124,7 @@
               Cancelar
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn flat class="btn-continuar mr-3" @click="submit">
+            <v-btn flat class="btn-continuar mr-3" @click="submit" :loading="loading">
               Ingresar
               <v-icon right>send</v-icon>
             </v-btn>
@@ -124,7 +134,7 @@
               <v-icon large>clear</v-icon>
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn flat icon color="primary" class="mr-3" @click="submit">
+            <v-btn flat icon color="primary" class="mr-3" @click="submit" :loading="loading">
               <v-icon large>send</v-icon>
             </v-btn>
           </v-card-actions>
@@ -146,6 +156,8 @@ export default {
   },
   data () {
     return {
+      loading: false,
+      successDialog: false,
       money: {
         decimal: '.',
         thousands: ',',
@@ -178,16 +190,38 @@ export default {
         ruc: '',
         razonSocial: '',
         contribucion: 0.00,
+        valorContribucion: 0.00,
         diaCobro: '',
-        gestor: '',
+        nombreGestor: '',
         estado: ''
       }
     }
   },
   directives: {money: VMoney},
   methods: {
+    parse (valor) {
+      let x = valor.replace(/\s/g, '')
+      x = x.replace(/\$/g, '')
+      return parseFloat(x)
+    },
     submit () {
-      console.log('Form submited')
+      this.loading = true
+      this.benefactor.valorContribucion = this.parse(this.benefactor.contribucion)
+      this.$http.post('/api/benefactores/', this.benefactor)
+        .then((response) => {
+          this.loading = false
+          if (response.body.estado) {
+            this.successDialog = true
+          } else {
+            console.log(response.body)
+          }
+        }, (err) => {
+          this.loading = false
+          console.log(err)
+        })
+    },
+    regresar () {
+      this.$router.push('/benefactores/')
     }
   }
 }
@@ -198,5 +232,8 @@ export default {
   }
   fieldset {
     border: 1.5px double #21378A;
+  }
+  #radioTipo   {
+    padding-left: 23% !important;
   }
 </style>
