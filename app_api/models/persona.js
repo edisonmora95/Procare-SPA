@@ -2,7 +2,7 @@
   @Descripcion: Modelo de persona
   @Autor: jose viteri
   @FechaCreacion: 20/05/2017
-  @UltimaFechaModificacion: 
+  @UltimaFechaModificacion:
     19/08/2017 @JoseViteri se agrego tipo, se quito sueldo
     17/02/2018  @edisonmora95 Formato a los errores
 */
@@ -195,6 +195,27 @@ module.exports = function(sequelize, DataTypes) {
   ///////////////////////////////////////
   //FUNCIONES CON PROMESAS
   ///////////////////////////////////////
+  Persona.obtenerRolesP = (idPersona) => {
+    const Rol = sequelize.import("../models/rol");
+    return new Promise( (resolve, reject) => {
+      return Persona.findOne({
+        where : {
+          id : idPersona
+        },
+        include : [
+          {
+            model : Rol
+          }
+        ]
+      })
+      .then( persona => {
+        return resolve(persona.Rols);
+      })
+      .catch( error => {
+        return reject(error);
+      });
+    });
+  }
   Persona.buscarPersonaPorCedulaP = (cedula) => {
     return new Promise( (resolve, reject) => {
       if( !cedula ) { return reject( errors.SEQUELIZE_ERROR('No ingresó la cédula a buscar', 'Find error') ); }
@@ -296,12 +317,12 @@ module.exports = function(sequelize, DataTypes) {
         trabajo         : persona.trabajo,
         convencional    : persona.convencional,
         tipo            : persona.tipo
-      }, 
-      { 
+      },
+      {
         where : {
           id  : idPersona
         },
-        transaction  : transaction 
+        transaction  : transaction
       })
       .then( resultado => {
         if( resultado[0] < 1 )   { return   reject( errors.SEQUELIZE_ERROR('No se encontró el registro de la persona para editar', 'Edit error') ); }
@@ -332,12 +353,12 @@ module.exports = function(sequelize, DataTypes) {
       if( idPersona < 0 )  { return reject( errors.SEQUELIZE_FK_ERROR('Id inválido') ); }
       return Persona.update({
         contrasenna : contrasenna
-      }, 
-      { 
+      },
+      {
         where : {
           id  : idPersona
         },
-        transaction  : transaction 
+        transaction  : transaction
       })
       .then( resultado => {
         if ( resultado[0] < 1 ) { return reject( errors.SEQUELIZE_ERROR('No se encontró el registro de la persona para editar', 'Edit error') ); }
@@ -387,7 +408,7 @@ module.exports = function(sequelize, DataTypes) {
       .catch( fail => {
         return reject( errors.ERROR_HANDLER(fail) );
       });
-    });        
+    });
   }
   Persona.crearEmpresaT = (empresa, transaction) => {
     return new Promise( (resolve, reject) => {

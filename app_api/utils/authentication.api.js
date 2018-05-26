@@ -14,10 +14,11 @@ const verifyToken = (req, res, next) => {
 	if( !token ){
 		return respuesta.apiAuthError(res, 'Token no enviado');
 	}
-	
+
 	const secret  = config[process.env.NODE_ENV].secret;
 	jwt.verify(token, secret, (err, decoded) => {
 		if ( err ) {
+      console.log(err)
 			return respuesta.apiAuthError(res, 'Token inválido');
 		}
 		req.decoded = decoded;
@@ -45,13 +46,13 @@ const verifyRol = (arrayRoles) => {
 		if ( flag ) {
 			next();
 		} else {
-			return respuesta.apiAuthError(res, 'Usuario no autorizado');	
+			return respuesta.apiAuthError(res, 'Usuario no autorizado');
 		}
 	}
 };
 
 module.exports = {
-	verifyToken, 
+	verifyToken,
 	verifyRol,
 }
 

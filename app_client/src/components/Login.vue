@@ -3,7 +3,7 @@
     <v-layout align-center justify-center>
       <v-flex xs10 sm6 md4>
         <v-alert type="error" dismissible v-model="alert" @input="onClose" v-if="error">
-          {{ error.mensaje }}
+          {{ error }}
         </v-alert>
         <v-card class="elevation-12">
           <v-card-media

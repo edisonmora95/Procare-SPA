@@ -20,7 +20,7 @@ const authenticate = (req, res, next) => {
 		}
 		//Obtengo los roles actuales del usuario
 		let roles           = yield ModeloPersona.obtenerRolesP(persona.get('id'));
-		const rolesActuales = obtenerRolesActuales(roles);
+    const rolesActuales = obtenerRolesActuales(roles);
 		//Genero el token
 		const payload = {
 			roles : rolesActuales	,

@@ -8,32 +8,27 @@ export default {
     Vue.http.post('/api/login/', payload)
       .then((response) => {
         commit('setLoading', false)
-        console.log(response)
-        if (response.body.status) {
-          Vue.http.headers.common['x-access-token'] = response.body.token
+        if (response.body.success) {
+          localStorage.setItem('x-access-token', response.body.token)
           dispatch('getLoggedUser')
-        } else {
-          commit('setError', {mensaje: 'Credenciales incorrectas'})
         }
       }, (err) => {
-        console.log(err)
         commit('setLoading', false)
-        commit('setError', {mensaje: 'Credenciales incorrectas'})
+        commit('setError', err.body.mensaje)
       })
   },
   logout ({commit}) {
-    commit('setLoggedIn', true)
-    Vue.http.get('/api/login/logout')
-      .then((response) => {
-        commit('setUsuario', null)
-        commit('setLoggedIn', false)
-        router.push('/login')
-      })
+    localStorage.removeItem('x-access-token')
+    Vue.http.headers.common['x-access-token'] = null
+    commit('setUsuario', null)
+    commit('setLoggedIn', false)
+    router.push('/login')
   },
   getLoggedUser ({commit}) {
     commit('setError', null)
     commit('setLoading', true)
-    Vue.http.get('/api/login/usuarios')
+    Vue.http.headers.common['x-access-token'] = localStorage.getItem('x-access-token')
+    Vue.http.get('/api/login/usuarios/')
       .then((response) => {
         commit('setLoading', false)
         console.log(response)

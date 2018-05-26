@@ -3,9 +3,9 @@
 const jwt    = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const utils	 = require('../utils/utils');
+const co     = require('co');
 
 const ModeloPersona    = require('../models').Persona;
-const ModeloPersonaRol = require('../models').PersonaRol;
 
 const config    = require('../config/config');
 const respuesta = require('../utils/respuestas');
@@ -46,46 +46,58 @@ const cambioContrasenna = (req, res) => {
 };
 
 const login = (req, res) => {
-	const idPersona = req.user.get('id');
-	ModeloPersonaRol.buscarRolesDePersonaPorId(idPersona)
-	.then( roles => {
-		roles = obtenerRolesActuales(roles);
-		if ( roles === undefined || roles.length === 0 ) {
-			return respuesta.viewsUnauthorized(res);
-		}else{
-			const payload = {
-	      roles : roles,
-	      id    : idPersona
-	    };
-	    const secret = config[process.env.NODE_ENV].secret;
-	    const token  = jwt.sign(payload, secret);
-	    return res.send({
-	      status : true,
-	      token  : token,
-	    });
-		}
-	})
-	.catch( fail => {
-		return respuesta.ERROR_SERVIDOR(res, fail);
-	});
+	const correo   = req.body.correo;
+  const password = req.body.password;
+  co(function* (){
+    //Primero se verifica si el correo existe en la base
+    let persona = yield ModeloPersona.buscarPersonaPorEmailP(correo);
+    if( !persona ) {
+      return respuesta.error(res, 'No se encontró el correo en la base de datos', '', null);
+    }
+    //Ahora se comparan las contraseñas
+    if( !bcrypt.compareSync(password, persona.get('contrasenna')) ) {
+      return respuesta.error(res, 'Contraseña no coincide', '', null);
+    }
+    //Obtengo los roles actuales del usuario
+    let roles           = yield ModeloPersona.obtenerRolesP(persona.get('id'));
+    const rolesActuales = obtenerRolesActuales(roles);
+    //Genero el token
+    const payload = {
+      roles : rolesActuales ,
+      id    : persona.get('id')
+    };
+    const secret = config[process.env.NODE_ENV].secret;
+    const token  = jwt.sign(payload, secret, { expiresIn: 60 * 60 * 24 * 7 });
+    res.send({
+      success: true,
+      token  : token,
+    });
+  })
+  .catch( fail => {
+    res.status(500).send(fail);
+  });
 };
 
 const getUsuario = (req, res) => {
-	const usuario      = req.user;
-	const rolesUsuario = usuario.get('Rols');
-	let lista	= [];
-	for (let i = 0; i < rolesUsuario.length; i++) {
-		lista.push(rolesUsuario[i].get('nombre'));
-	}
-	const datos = {
-		id 				: usuario.get('id'),
-		nombres		: usuario.get('nombres'),
-		apellidos : usuario.get('apellidos'),
-		genero    : usuario.get('genero'),
-		correo		: usuario.get('correo'),
-		roles 		: lista
-	};
-	return respuesta.okGet(res, 'Usuario obtenido', datos);
+	const idUsuario = req.decoded.id
+  ModeloPersona.deserializarUsuario(idUsuario)
+    .then((usuario) => {
+      if (!usuario) {
+        res.send({estado: false, mensaje: 'No se encontró al usuario'})
+      }
+      const datos = {
+        id        : usuario.get('id'),
+        nombres   : usuario.get('nombres'),
+        apellidos : usuario.get('apellidos'),
+        genero    : usuario.get('genero'),
+        correo    : usuario.get('correo'),
+        roles     : req.decoded.roles
+      };
+      return respuesta.okGet(res, 'Usuario obtenido', datos);
+    })
+    .catch((fail) => {
+      return respuesta.ERROR_SERVIDOR(res, fail)
+    })
 };
 
 module.exports = {
@@ -97,7 +109,7 @@ module.exports = {
 function obtenerRolesActuales(arrayRoles){
   let array = [];
   for (let i = 0; i < arrayRoles.length; i++) {
-    let actual = arrayRoles[i];
+    let actual = arrayRoles[i].PersonaRol;
     if( !actual.get('fechaFin') ){
       array.push(actual.get('RolNombre'));
     }

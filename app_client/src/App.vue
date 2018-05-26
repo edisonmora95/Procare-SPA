@@ -15,11 +15,12 @@
 
 <script>
 export default {
-  created () {
-    this.$store.dispatch('getLoggedUser')
-    if (this.usuario) {
-      this.$store.dispatch('getGrupos')
-      this.$store.dispatch('getProcarianos')
+  mounted () {
+    const ls = localStorage.getItem('x-access-token')
+    if (ls !== null && ls !== undefined && ls !== '') {
+      this.$store.dispatch('getLoggedUser')
+    } else {
+      this.$router.push('/login')
     }
   },
   computed: {
