@@ -5,6 +5,8 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import money from 'v-money'
 import moment from 'moment'
+import FullCalendar from 'vue-full-calendar'
+import 'fullcalendar/dist/fullcalendar.min.css'
 
 import App from './App'
 import router from './router'
@@ -13,6 +15,7 @@ import NavBar from './components/Shared/Navbar.vue'
 
 Vue.use(Vuetify)
 Vue.use(money, {precision: 2})
+Vue.use(FullCalendar)
 
 Vue.config.productionTip = false
 

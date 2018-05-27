@@ -3,6 +3,10 @@ import Router from 'vue-router'
 import AuthGuard from './auth-guard'
 
 import Login from '@/components/Login'
+import Home from '@/components/Home'
+// TAREAS EVENTOS
+import IngresarEvento from '@/components/Eventos/IngresarEvento'
+import IngresarTarea from '@/components/Eventos/IngresarTarea'
 // PROCARIANOS
 import IngresarProcariano from '@/components/Procarianos/IngresarProcariano'
 import BuscarProcarianos from '@/components/Procarianos/BuscarProcarianos'
@@ -21,6 +25,21 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '/',
+      name: 'Home',
+      component: Home
+    },
+    {
+      path: '/eventos/nuevo',
+      name: 'IngresarEvento',
+      component: IngresarEvento
+    },
+    {
+      path: '/tareas/nueva',
+      name: 'IngresarTarea',
+      component: IngresarTarea
+    },
     {
       path: '/login',
       name: 'Login',

@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  mounted () {
+  created () {
     const ls = localStorage.getItem('x-access-token')
     if (ls !== null && ls !== undefined && ls !== '') {
       this.$store.dispatch('getLoggedUser')

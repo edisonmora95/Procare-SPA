@@ -16,6 +16,7 @@
     "moment": "^2.22.1",
     "v-money": "^0.8.1",
     "vue": "^2.5.2",
+    "vue-full-calendar": "^2.5.4",
     "vue-resource": "^1.5.0",
     "vue-router": "^3.0.1",
     "vuetify": "^1.0.0",

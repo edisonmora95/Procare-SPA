@@ -167,7 +167,7 @@ const cambiarEstado = (req, res, next) => {
 
   ModeloTarea.cambiarEstadoP(idTarea, estadoNuevo)
   .then( success => {
-  	return respuesta.okUpdate(res, 'Tarea cambiada de estado', success);  
+  	return respuesta.okUpdate(res, 'Tarea cambiada de estado', success);
   })
   .catch( fail => {
   	return respuesta.ERROR_SERVIDOR(res, fail);
