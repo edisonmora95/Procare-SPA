@@ -58,6 +58,18 @@
         return this.$store.getters.usuario
       }
     },
+    watch: {
+      usuario (value) {
+        console.log('value:', value)
+        if (value) {
+          if (this.usuario.roles.includes('Personal')) {
+            this.getTareasEventos()
+          } else {
+            this.getTareasEventosUsuario()
+          }
+        }
+      }
+    },
     data () {
       return {
         seleccion: null,
