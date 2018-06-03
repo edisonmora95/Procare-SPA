@@ -2,13 +2,15 @@
 
 process.env.NODE_ENV = 'test';
 
-const app     = require('../../app')
+const { serverApp }   = require('../../../app')
+const { app, server } = serverApp()
+
 const chai 		= require('chai');
 const request = require('supertest');
 const assert 	= chai.assert;
 const expect 	= chai.expect;
 
-let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6WyJQZXJzb25hbCJdLCJpZCI6MiwiaWF0IjoxNTEzODkwNzAxfQ.5OQlRcegbehBU2C9Lnwz59zgBPRyBLicpwnpigYllG0';
+let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6WyJQZXJzb25hbCJdLCJpZCI6MiwiaWF0IjoxNTI3NDYzMTc5LCJleHAiOjE1MjgwNjc5Nzl9.vZIpehBPISJ1UCrTfGM4huOMIrTFA-ZCtAd3JqRlNHM"
 
 describe('EVENTOS', () => {
 
@@ -28,7 +30,7 @@ describe('EVENTOS', () => {
 				responsable   	 : 4
 			};
 		});
-		
+
 		it('CP1. Creación exitosa', function(done){
 			request(app)
 				.post('/api/eventos/')
@@ -67,7 +69,7 @@ describe('EVENTOS', () => {
 					expect(res.body.estado).to.equal(false);
 					expect(res.body.mensaje).to.equal('Error en el servidor');
 					expect(res.body.error.tipo).to.equal('Foreign key constraint error');
-					expect(res.body.error.mensaje).to.equal('ER_NO_REFERENCED_ROW_2: idOrganizador');
+					expect(res.body.error.mensaje).to.equal('ER_NO_REFERENCED_ROW_2: eventos_ibfk_1');
 					done();
 				});
 		});
@@ -82,12 +84,12 @@ describe('EVENTOS', () => {
 					expect(res.body.estado).to.equal(false);
 					expect(res.body.mensaje).to.equal('Error en el servidor');
 					expect(res.body.error.tipo).to.equal('Validation error');
-					expect(res.body.error.mensaje).to.equal('nombre cannot be null');
+					expect(res.body.error.mensaje).to.equal('Evento.nombre cannot be null');
 					done();
 				});
 		});
 	});
-	
+
 	describe('mostrarEventos', () => {
 		it('CP1. Búsqueda exitosa', function(done) {
 	    request(app)
@@ -101,7 +103,7 @@ describe('EVENTOS', () => {
 				});
 		});
 	});
-	
+
 	describe('cambiarEstado', () => {
 		it('CP1. Cambio exitoso', function(done) {
 	    request(app)
@@ -154,5 +156,5 @@ describe('EVENTOS', () => {
 				});
 		});
 	});
-	
+
 });

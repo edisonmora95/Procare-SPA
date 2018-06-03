@@ -2,13 +2,15 @@
 
 process.env.NODE_ENV = 'test';
 
-const app     = require('../../app')
+const { serverApp }   = require('../../../app')
+const { app, server } = serverApp()
+
 const chai 		= require('chai');
 const request = require('supertest');
 const assert 	= chai.assert;
 const expect 	= chai.expect;
 
-let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6WyJQZXJzb25hbCJdLCJpZCI6MiwiaWF0IjoxNTEzODkwNzAxfQ.5OQlRcegbehBU2C9Lnwz59zgBPRyBLicpwnpigYllG0';
+let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6WyJQZXJzb25hbCJdLCJpZCI6MiwiaWF0IjoxNTI3NDYzMTc5LCJleHAiOjE1MjgwNjc5Nzl9.vZIpehBPISJ1UCrTfGM4huOMIrTFA-ZCtAd3JqRlNHM"
 
 describe('TAREAS', () => {
 
@@ -30,7 +32,7 @@ describe('TAREAS', () => {
 				responsable   	 : 4
 			};
 		});
-		
+
 		it('CP1. Creación exitosa', function(done){
 
 			request(app)
@@ -70,7 +72,7 @@ describe('TAREAS', () => {
 					expect(res.body.estado).to.equal(false);
 					expect(res.body.mensaje).to.equal('Error en el servidor');
 					expect(res.body.error.tipo).to.equal('Foreign key constraint error');
-					expect(res.body.error.mensaje).to.equal('ER_NO_REFERENCED_ROW_2: idResponsable');
+					expect(res.body.error.mensaje).to.equal('ER_NO_REFERENCED_ROW_2: tareas_ibfk_1');
 					done();
 				});
 		});
@@ -85,7 +87,7 @@ describe('TAREAS', () => {
 					expect(res.body.estado).to.equal(false);
 					expect(res.body.mensaje).to.equal('Error en el servidor');
 					expect(res.body.error.tipo).to.equal('Validation error');
-					expect(res.body.error.mensaje).to.equal('nombre cannot be null');
+					expect(res.body.error.mensaje).to.equal('Tarea.nombre cannot be null');
 					done();
 				});
 		});

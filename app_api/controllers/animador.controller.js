@@ -192,12 +192,10 @@ module.exports.posiblesAnimadores = (req,res,next) => {
   .then( values => {
     const procarianos  = values[0];
     const animActuales = values[1];
-    //console.log('procarianos:', procarianos);
     for (let i = 0; i < animActuales.length; i++) {
       let animActual = animActuales[i];
       for (let j = 0; j < procarianos.length; j++) {
         let procarianoActual = procarianos[j];
-        console.log('anim:', animActual.get('ProcarianoId'), ' procariano:', procarianoActual.get('procarianoId'));
         if ( animActual.get('ProcarianoId') === procarianoActual.get('procarianoId') ) {
           procarianos.splice(j, 1);
           break;

@@ -9,7 +9,6 @@ let should = chai.should();
 
 let sequelize        = require('../../models/').sequelize;
 let ModeloAnimador   = require('../../models/').Animador;
-let ModeloGrupo      = require('../../models/').Grupo;
 
 /*
   VARIABLES GLOBALES
