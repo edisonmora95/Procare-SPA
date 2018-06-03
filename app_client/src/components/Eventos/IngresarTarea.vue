@@ -7,7 +7,7 @@
             <h1 class="mx-auto display-1">Tarea nueva</h1>
           </v-card-title>
           <v-card-text>
-            <v-form>
+            <v-form v-model="formValid">
               <v-container grid-list-xl fluid>
                 <v-layout wrap row>
                   <v-flex xs12>
@@ -17,8 +17,27 @@
                     <v-text-field name="decripcion" label="Descripción" placeholder="El animador deberá contactarse con su grupo..." v-model="tarea.descripcion" required :rules="[rules.required, rules.specialChar]" auto-grow multi-line rows="1"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6>
+                    <v-select :items="categorias" item-text="nombre" item-value="id" v-model="tarea.categoria" label="Categoría" :rules="[rules.required]"></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm6>
+                    <v-select :items="prioridades" item-text="nombre" item-value="id" v-model="tarea.prioridad" label="Prioridad" :rules="[rules.required]"></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm6>
+                    <v-select :items="procarianos" item-text="nombre" item-value="id" v-model="tarea.responsable" label="Responsable" autocomplete></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm6>
+                    <v-select :items="estados" item-text="nombre" item-value="id" v-model="tarea.estado" label="Estado" :rules="[rules.required]"></v-select>
+                  </v-flex>
+                  <v-flex xs12 style="text-align: center;">
+                    <v-divider class="mb-3"></v-divider>
+                    <h2>Fechas</h2>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4 offset-sm4 offset-md5 style="text-align: center;">
+                    <v-switch label="Todo el día" v-model="allDay"></v-switch>
+                  </v-flex>
+                  <v-flex xs12 sm6>
                     <v-dialog ref="dialogFI" v-model="modalFI" :return-value:sync="fechaInicio" persistent lazy full-width width="290px">
-                      <v-text-field slot="activator" v-model="fechaInicio" label="Fecha de inicio" prepend-icon="event" readonly></v-text-field>
+                      <v-text-field slot="activator" v-model="fechaInicio" label="Fecha de inicio" prepend-icon="event" readonly :rules="[rules.fechaValida]"></v-text-field>
                       <v-date-picker v-model="fechaInicio" scrollable>
                         <v-spacer></v-spacer>
                         <v-btn flat color="primary" @click="modalFI = false">Cancel</v-btn>
@@ -26,7 +45,7 @@
                       </v-date-picker>
                     </v-dialog>
                   </v-flex>
-                  <v-flex xs12 sm6>
+                  <v-flex xs12 sm6 v-if="!allDay">
                     <v-dialog ref="dialogHI" v-model="modalHI" :return-value.sync="horaInicio" persistent lazy full-width width="290px">
                       <v-text-field slot="activator" v-model="horaInicio" label="Hora de inicio" prepend-icon="access_time" readonly></v-text-field>
                       <v-time-picker v-model="horaInicio" actions>
@@ -38,7 +57,7 @@
                   </v-flex>
                   <v-flex xs12 sm6>
                     <v-dialog ref="dialogFF" v-model="modalFF" :return-value:sync="fechaFin" persistent lazy full-width width="290px">
-                      <v-text-field slot="activator" v-model="fechaFin" label="Fecha final" prepend-icon="event" readonly></v-text-field>
+                      <v-text-field slot="activator" v-model="fechaFin" label="Fecha final" prepend-icon="event" readonly :rules="[rules.fechaValida]"></v-text-field>
                       <v-date-picker v-model="fechaFin" scrollable>
                         <v-spacer></v-spacer>
                         <v-btn flat color="primary" @click="modalFF = false">Cancel</v-btn>
@@ -46,7 +65,7 @@
                       </v-date-picker>
                     </v-dialog>
                   </v-flex>
-                  <v-flex xs12 sm6>
+                  <v-flex xs12 sm6 v-if="!allDay">
                     <v-dialog ref="dialogHF" v-model="modalHF" :return-value.sync="horaFin" persistent lazy full-width width="290px">
                       <v-text-field slot="activator" v-model="horaFin" label="Hora final" prepend-icon="access_time" readonly></v-text-field>
                       <v-time-picker v-model="horaFin" actions>
@@ -56,17 +75,8 @@
                       </v-time-picker>
                     </v-dialog>
                   </v-flex>
-                  <v-flex xs12 sm6>
-                    <v-select :items="categorias" item-text="nombre" item-value="id" v-model="tarea.categoria" label="Categoría"></v-select>
-                  </v-flex>
-                  <v-flex xs12 sm6>
-                    <v-select :items="prioridades" item-text="nombre" item-value="id" v-model="tarea.prioridad" label="Prioridad"></v-select>
-                  </v-flex>
-                  <v-flex xs12 sm6>
-                    <v-select :items="procarianos" item-text="nombre" item-value="id" v-model="tarea.responsable" label="Responsable" autocomplete></v-select>
-                  </v-flex>
-                  <v-flex xs12 sm6>
-                    <v-select :items="estados" item-text="nombre" item-value="id" v-model="tarea.estado" label="Estado"></v-select>
+                  <v-flex xs12 style="text-align: center;">
+                    <v-divider></v-divider>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -78,7 +88,7 @@
               Cancelar
             </v-btn>
             <v-spacer></v-spacer>
-            <v-btn flat class="btn-continuar mr-3" @click="onSubmit" :loading="loading">
+            <v-btn flat class="btn-continuar mr-3" @click="onSubmit" :loading="loading" :disabled="!formValid">
               Crear
               <v-icon right>send</v-icon>
             </v-btn>
@@ -121,6 +131,8 @@
     },
     data () {
       return {
+        formValid: false,
+        allDay: false,
         loading: false,
         successDialog: false,
         error: null,
@@ -185,6 +197,13 @@
           prioridad: '',
           estado: 1,
           responsable: ''
+        }
+      }
+    },
+    watch: {
+      fechaInicio (value) {
+        if (value && this.allDay) {
+          this.fechaFin = this.fechaInicio
         }
       }
     },
@@ -258,10 +277,14 @@
         this.error = null
       },
       getFechaCompleta (fecha, hora) {
-        return fecha.concat('T').concat(hora).concat(':00')
+        if (hora === '' || hora === null || this.allDay) {
+          return fecha
+        } else {
+          return fecha.concat('T').concat(hora).concat(':00')
+        }
       },
       validarFechas (inicio, fin) {
-        return new Date(inicio) < new Date(fin)
+        return !(new Date(fin) < new Date(inicio))
       },
       setError (mensaje) {
         this.errorDialog = true

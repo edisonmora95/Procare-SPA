@@ -89,7 +89,7 @@
                   <v-container grid-list-xl fluid>
                     <v-layout wrap>
                       <v-flex xs12 sm6>
-                        <v-select :items="tipos" item-text="text" item-value="id" v-model="procariano.tipo" label="Tipo"></v-select>
+                        <v-select :items="tipos" item-text="text" item-value="id" v-model="procariano.tipo" label="Tipo" :rules="[rules.required]"></v-select>
                       </v-flex>
                       <v-flex xs12 sm6>
                         <v-text-field name="promocion" v-model="procariano.promocion" label="Promoción" :rules="[rules.specialChar]"></v-text-field>

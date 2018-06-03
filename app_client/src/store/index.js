@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueResource from 'vue-resource'
+import moment from 'moment'
 
 import getters from './getters'
 import actions from './actions'
@@ -51,6 +52,18 @@ export const store = new Vuex.Store({
         // eslint-disable-next-line
         const pattern = /^$|^[a-zA-Z0-9áéíóúÁÉÍÓÚ!@#\$%\^\&*\)\(+= ._-]+$/g
         return pattern.test(value) || 'No se permiten caracteres especiales'
+      },
+      fechaValida: (value) => {
+        if (value) {
+          let hoy = new Date().toLocaleDateString()
+          let mes = hoy.split('/')[0]
+          let dia = hoy.split('/')[1]
+          let anio = hoy.split('/')[2]
+          hoy = anio.concat('-').concat(mes).concat('-').concat(dia)
+          return !moment(value).isBefore(hoy) || 'No puede ingresar una fecha pasada'
+        } else {
+          return true
+        }
       }
     },
     masks: {

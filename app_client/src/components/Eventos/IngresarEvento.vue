@@ -20,8 +20,14 @@
                     <v-text-field name="lugar" label="Lugar" v-model="evento.lugar" required :rules="[rules.required, rules.specialChar]"></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm6>
+                    <v-select :items="procarianos" item-text="nombre" item-value="id" v-model="evento.responsable" label="Responsable" autocomplete :rules="[rules.required]"></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm6>
+                    <v-select :items="estados" item-text="nombre" item-value="id" v-model="evento.estado" label="Estado" :rules="[rules.required]"></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm6>
                     <v-dialog ref="dialogFI" v-model="modalFI" :return-value:sync="fechaInicio" persistent lazy full-width width="290px">
-                      <v-text-field slot="activator" v-model="fechaInicio" label="Fecha de inicio" prepend-icon="event" readonly></v-text-field>
+                      <v-text-field slot="activator" v-model="fechaInicio" label="Fecha de inicio" prepend-icon="event" readonly :rules="[rules.fechaValida]"></v-text-field>
                       <v-date-picker v-model="fechaInicio" scrollable>
                         <v-spacer></v-spacer>
                         <v-btn flat color="primary" @click="modalFI = false">Cancel</v-btn>
@@ -41,7 +47,7 @@
                   </v-flex>
                   <v-flex xs12 sm6>
                     <v-dialog ref="dialogFF" v-model="modalFF" :return-value:sync="fechaFin" persistent lazy full-width width="290px">
-                      <v-text-field slot="activator" v-model="fechaFin" label="Fecha final" prepend-icon="event" readonly></v-text-field>
+                      <v-text-field slot="activator" v-model="fechaFin" label="Fecha final" prepend-icon="event" readonly :rules="[rules.fechaValida]"></v-text-field>
                       <v-date-picker v-model="fechaFin" scrollable>
                         <v-spacer></v-spacer>
                         <v-btn flat color="primary" @click="modalFF = false">Cancel</v-btn>
@@ -58,12 +64,6 @@
                         <v-btn flat color="primary" @click="$refs.dialogHF.save(horaFin)">OK</v-btn>
                       </v-time-picker>
                     </v-dialog>
-                  </v-flex>
-                  <v-flex xs12 sm6>
-                    <v-select :items="procarianos" item-text="nombre" item-value="id" v-model="evento.responsable" label="Responsable" autocomplete></v-select>
-                  </v-flex>
-                  <v-flex xs12 sm6>
-                    <v-select :items="estados" item-text="nombre" item-value="id" v-model="evento.estado" label="Estado"></v-select>
                   </v-flex>
                 </v-layout>
               </v-container>
